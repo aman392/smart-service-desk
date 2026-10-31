@@ -1,14 +1,21 @@
 # ServiceOps — AI-assisted work order intake
 
-Small field-service operations prototype. Enter a synthetic repair, installation, or quotation request; inspect extracted fields; and see whether basic business rules flag it for review. **The app never dispatches a technician.**
+# Smart Service Desk
+
+A Python application for organizing and reviewing incoming service requests.
+
+It uses Google's Gemini API to extract information such as the request type, equipment ID, priority, contact details, and service location from customer messages. The extracted information is checked against basic validation rules to identify requests that need additional details before processing.
 
 ## Features
-- Streamlit form with session history and JSON/CSV exports
-- Deterministic local demo, without API credentials (clearly labeled)
-- Optional real Gemini extraction with structured JSON schema
-- Independent validation of phone number, address, asset ID, and urgency
-- Two documented prompt versions for future side-by-side evaluation
-- Unit tests for a few key validation paths
+- Extracts service request details using the Gemini API.
+- Supports a local demo mode without an API key.
+- Checks contact numbers, service locations, and other required information.
+- Identifies incomplete requests and flags them for manual review.
+- Displays structured results in JSON format.
+- Maintains a temporary history of processed requests.
+- Supports downloading individual results as JSON and session history as CSV.
+- Includes two prompt configurations for experimenting with extraction behavior.
+- Includes automated tests for core validation rules.
 
 ## Local setup (Windows PowerShell)
 ```powershell
@@ -19,7 +26,7 @@ py -3 -m venv .venv
 ```
 Visit http://localhost:8501. Demo mode works with no key.
 
-## Gemini setup (optional)
+## Gemini API Configuration
 1. Get an API key in Google AI Studio. Check model availability and the free tier for your account.
 2. Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` and replace the placeholder locally.
 3. Restart Streamlit, choose **Gemini API**, and test a **synthetic** message. Never commit the secrets file.
@@ -30,10 +37,11 @@ Visit http://localhost:8501. Demo mode works with no key.
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-## Limitations
-- Sample mode is regex-based, not an LLM. Its extraction is intentionally limited.
-- Validation checks are conservative but cannot guarantee complete correctness, fraud prevention, or grounding of all model fields.
-- Session state is temporary; no database or persistent history.
-- Prompt V1 and V2 have not been experimentally benchmarked. The UI displays them for inspection only.
-- API requests in free tiers may have rate limits and privacy implications: use synthetic data.
-- Public deployments must configure GEMINI_API_KEY through hosting secrets, not in Git.
+
+## Current Limitations
+- The application focuses on request intake and validation. Scheduling and dispatch management are outside its current scope.
+- Request history is stored only during the active session.
+- Demo mode uses simple pattern matching and is less flexible than Gemini extraction.
+- AI-generated results may occasionally be inaccurate, so requests requiring clarification are flagged for review.
+- The two prompt versions are available for comparison, but a formal evaluation has not yet been completed.
+- Gemini API availability and usage limits depend on the configured account.
