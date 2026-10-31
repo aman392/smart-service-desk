@@ -1,4 +1,4 @@
-# ServiceOps — AI-assisted work order intake
+
 
 # Smart Service Desk
 
